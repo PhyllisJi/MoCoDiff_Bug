@@ -87,6 +87,12 @@ def train(inp, label):
         layer_index = len(tf_model.layers) - 4
         construct_sub_model(tf_model, tf_input, layer_index)
         construct_sub_model(tf_model, tf_input, layer_index-1)
+        construct_sub_model(tf_model, tf_input, layer_index-2)
+        construct_sub_model(tf_model, tf_input, layer_index-3)
+        construct_sub_model(tf_model, tf_input, layer_index-4)
+        construct_sub_model(tf_model, tf_input, layer_index-5)
+        construct_sub_model(tf_model, tf_input, layer_index-6)
+        construct_sub_model(tf_model, tf_input, layer_index-7)
         tf_output = tf_model(tf_input)
         output_transpose = [(0), (0, 1), (0, 2, 1), (0, 3, 1, 2), (0, 4, 1, 2, 3)]
         tf_output_trans = tf.transpose(tf_output, list(output_transpose[(len(tf_output.shape) - 1)])).numpy()
