@@ -1,0 +1,7 @@
+{
+    "run result": true,
+    "run time": 0.4393270015716553,
+    "train time": 0.8869907855987549,
+    "loss": 2.3282382488250732,
+    "target lib": "tensorflow_cpu"
+}
