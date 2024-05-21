@@ -32,7 +32,6 @@ def find_difference_positions(array1, array2, distance=1):
     return positions, values,
 
 # res_path = "pytorch_gpu-paddle_gpu-LeNet"
-res_path = "tensorflow-LeNet"
 model = "LeNet"
 level = "12"
 order = "654"
@@ -41,14 +40,14 @@ library_2 = "paddle"
 comp_type = "same"
 
 if comp_type == "same":
-    gpu_code_path = f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/{model}-{level}-{order}_{library_1}_gpu_debug.py'
-    cpu_code_path = f'./{res_path}/{model}-{level}-{order}/case/{library_1}_cpu/{model}-{level}-{order}_{library_1}_cpu_debug.py'
+    gpu_code_path = f'./{model}-{level}-{order}/case/{library_1}_gpu/{model}-{level}-{order}_{library_1}_gpu_debug.py'
+    cpu_code_path = f'./{model}-{level}-{order}/case/{library_1}_cpu/{model}-{level}-{order}_{library_1}_cpu_debug.py'
     
     gpu_result = subprocess.run(['python', gpu_code_path])
     cpu_result = subprocess.run(['python', cpu_code_path])
     
-    cpu_path =f'./{res_path}/{model}-{level}-{order}/case/{library_1}_cpu/layer_outputs/'
-    gpu_path =f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/layer_outputs/'
+    cpu_path =f'./{model}-{level}-{order}/case/{library_1}_cpu/layer_outputs/'
+    gpu_path =f'./{model}-{level}-{order}/case/{library_1}_gpu/layer_outputs/'
     npz_files = get_all_npz_files(cpu_path)
     print(len(npz_files))
     for i in range(len(npz_files)):
@@ -58,36 +57,6 @@ if comp_type == "same":
         print(npz_files[i], output_diff)
         positions, values = find_difference_positions(cpu_output, gpu_output, distance=output_diff)
         # print(positions, values)
-
-else:
-    code_path_1 = f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/{model}-{level}-{order}_{library_1}_gpu_debug.py'
-    code_path_2 = f'./{res_path}/{model}-{level}-{order}/case/{library_2}_gpu/{model}-{level}-{order}_{library_2}_gpu_debug.py'
-
-    # try:
-    #     result_1 = subprocess.run(['python', code_path_1], capture_output=True, text=True, check=True)
-    #     print(f"Standard Output of {library_1}:\n", result_1.stdout)
-    # except subprocess.CalledProcessError as e:
-    #     print(f"Standard Error of {library_1}:\n", e.stderr)
-    #     print(f"Return Code of {library_1}:", e.returncode)
-
-    # try:
-    #     result_2 = subprocess.run(['python', code_path_2], capture_output=True, text=True, check=True)
-    #     print(f"Standard Output of {library_2}:\n", result_2.stdout)
-    # except subprocess.CalledProcessError as e:
-    #     print(f"Standard Error of {library_2}:\n", e.stderr)
-    #     print(f"Return Code of {library_2}:", e.returncode)
-    
-    output_path_1 =f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/layer_outputs/'
-    output_path_2 =f'./{res_path}/{model}-{level}-{order}/case/{library_2}_gpu/layer_outputs/'
-    npz_files = get_all_npz_files(output_path_1)
-    print(len(npz_files))
-    for i in range(len(npz_files)):
-        output_1 = np.load(output_path_1 + npz_files[i])['arr_0']
-        output_2 = np.load(output_path_2 + npz_files[i])['arr_0']
-        output_diff = chebyshev_distance(output_1, output_2)
-        print(npz_files[i], output_diff)
-        positions, values = find_difference_positions(output_1, output_2, distance=output_diff)
-        print(positions, values)
 
 
 
