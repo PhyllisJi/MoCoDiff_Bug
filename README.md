@@ -16,10 +16,12 @@ tf.math.erf.npz 0.01932205818593502
 ```
 
 ### Steps to Reproduction
+```
 git clone -b tf-issue#67829 https://github.com/PhyllisJi/MoCoDiff_Bug.git
 cd MoCoDiff_Bug/
 cd tensorflow_bug/
 python ./layer_diff.py
+```
 ```
 The outputs are the Chebyshev distance for the last few layers
 The output of each layer is stored in the corresponding folder layer_outputs
