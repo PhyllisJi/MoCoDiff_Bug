@@ -4,14 +4,14 @@ import os
 
 
 os.environ['CUDA_VISIBLE_DEVICES'] = ''
-output_dir = "./tensorflow-LeNet/LeNet-12-654/case/tensorflow_cpu/layer_outputs/"
+output_dir = "./tensorflow_bug/LeNet-12-654/case/tensorflow_cpu/layer_outputs/"
 os.makedirs(output_dir, exist_ok=True)
 def construct_sub_model(tf_model, tf_input, layer_index):
     layer_output = tf_model.layers[layer_index].output
     layer_name = tf_model.layers[layer_index].name
     sub_model = tf.keras.Model(inputs = tf_model.input, outputs = layer_output)
     last_layer_output = sub_model(tf_input)
-    output_filename = "./tensorflow-LeNet/LeNet-12-654/case/tensorflow_cpu/layer_outputs/" + layer_name + ".npz"
+    output_filename = "./tensorflow_bug/LeNet-12-654/case/tensorflow_cpu/layer_outputs/" + layer_name + ".npz"
     np.savez(output_filename, arr_0 = last_layer_output)
 
 def Model_VlysjQxB81qtaIXsA_VkCXmPGmE7aDNP(input):
@@ -88,10 +88,16 @@ def train(inp, label):
         layer_index = len(tf_model.layers) - 4
         construct_sub_model(tf_model, tf_input, layer_index)
         construct_sub_model(tf_model, tf_input, layer_index-1)
+        construct_sub_model(tf_model, tf_input, layer_index-2)
+        construct_sub_model(tf_model, tf_input, layer_index-3)
+        construct_sub_model(tf_model, tf_input, layer_index-4)
+        construct_sub_model(tf_model, tf_input, layer_index-5)
+        construct_sub_model(tf_model, tf_input, layer_index-6)
+        construct_sub_model(tf_model, tf_input, layer_index-7)
         tf_output = tf_model(tf_input)
         output_transpose = [(0), (0, 1), (0, 2, 1), (0, 3, 1, 2), (0, 4, 1, 2, 3)]
         tf_output_trans = tf.transpose(tf_output, list(output_transpose[(len(tf_output.shape) - 1)])).numpy()
-        
+
         tf_targets = tf.convert_to_tensor(label)
         with tf.GradientTape() as tape:
             tf_predictions = tf_model(tf_input)
@@ -104,6 +110,6 @@ def train(inp, label):
             tf_gradients_dic.setdefault(var.name.replace('/', '.')[:-2], tf_gradient)
         
         return tf_gradients_dic, float(tf_loss.numpy()), tf_output_trans
-inp =np.load("./tensorflow-LeNet/LeNet-12-654/case/input.npz")
+inp =np.load("./tensorflow_bug/LeNet-12-654/case/input.npz")
 gradients, loss, output = train(inp['inp'], inp['label'])
 print(output)
