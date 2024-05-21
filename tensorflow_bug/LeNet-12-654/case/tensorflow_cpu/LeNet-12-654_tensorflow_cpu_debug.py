@@ -4,14 +4,14 @@ import os
 
 
 os.environ['CUDA_VISIBLE_DEVICES'] = ''
-output_dir = "./tensorflow_bug/LeNet-12-654/case/tensorflow_cpu/layer_outputs/"
+output_dir = "./LeNet-12-654/case/tensorflow_cpu/layer_outputs/"
 os.makedirs(output_dir, exist_ok=True)
 def construct_sub_model(tf_model, tf_input, layer_index):
     layer_output = tf_model.layers[layer_index].output
     layer_name = tf_model.layers[layer_index].name
     sub_model = tf.keras.Model(inputs = tf_model.input, outputs = layer_output)
     last_layer_output = sub_model(tf_input)
-    output_filename = "./tensorflow_bug/LeNet-12-654/case/tensorflow_cpu/layer_outputs/" + layer_name + ".npz"
+    output_filename = "./LeNet-12-654/case/tensorflow_cpu/layer_outputs/" + layer_name + ".npz"
     np.savez(output_filename, arr_0 = last_layer_output)
 
 def Model_VlysjQxB81qtaIXsA_VkCXmPGmE7aDNP(input):
@@ -110,6 +110,6 @@ def train(inp, label):
             tf_gradients_dic.setdefault(var.name.replace('/', '.')[:-2], tf_gradient)
         
         return tf_gradients_dic, float(tf_loss.numpy()), tf_output_trans
-inp =np.load("./tensorflow_bug/LeNet-12-654/case/input.npz")
+inp =np.load("./LeNet-12-654/case/input.npz")
 gradients, loss, output = train(inp['inp'], inp['label'])
 print(output)
