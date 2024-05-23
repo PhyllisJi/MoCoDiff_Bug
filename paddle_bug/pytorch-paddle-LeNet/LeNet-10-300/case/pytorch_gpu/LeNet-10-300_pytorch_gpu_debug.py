@@ -5,16 +5,21 @@ from torch import optim
 import os
 import torch.nn.functional as F
 
-
 output_dir = "./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/"
 os.makedirs(output_dir, exist_ok=True)
+
+
 class Model_ZJK2lsS1y4nGDJfj5hHvgktZJBBNTLu3(nn.Module):
     def __init__(self):
         super(Model_ZJK2lsS1y4nGDJfj5hHvgktZJBBNTLu3, self).__init__()
-        self.conv1_mutated = torch.nn.ConvTranspose2d(in_channels=1, out_channels=6, kernel_size=[5, 5], stride=[1, 1], padding=[0, 0], output_padding=[0, 0], dilation=[1, 1], groups=1, bias=True)
+        self.conv1_mutated = torch.nn.ConvTranspose2d(in_channels=1, out_channels=6, kernel_size=[5, 5], stride=[1, 1],
+                                                      padding=[0, 0], output_padding=[0, 0], dilation=[1, 1], groups=1,
+                                                      bias=True)
         self.relu1 = torch.nn.ReLU()
-        self.pool1_mutated = torch.nn.MaxPool2d(kernel_size=[3, 1], stride=[2, 2], padding=[0, 0], dilation=1, ceil_mode=False)
-        self.conv2_mutated = torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=[5, 5], stride=[1, 1], padding=[1, 1], dilation=[1, 1], groups=1, bias=True)
+        self.pool1_mutated = torch.nn.MaxPool2d(kernel_size=[3, 1], stride=[2, 2], padding=[0, 0], dilation=1,
+                                                ceil_mode=False)
+        self.conv2_mutated = torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=[5, 5], stride=[1, 1],
+                                             padding=[1, 1], dilation=[1, 1], groups=1, bias=True)
         self.relu2_mutated = torch.ceil
         self.pool2 = torch.nn.MaxPool2d(kernel_size=[2, 2], stride=[2, 2], padding=[0, 0], dilation=1, ceil_mode=False)
         self.flatten = torch.nn.Flatten()
@@ -29,17 +34,26 @@ class Model_ZJK2lsS1y4nGDJfj5hHvgktZJBBNTLu3(nn.Module):
         relu1_output = self.relu1(conv1_output)
         maxpool1_output = self.pool1_mutated(relu1_output)
         conv2_output = self.conv2_mutated(maxpool1_output)
-        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/conv2_output.npz",conv2_output.cpu().detach().numpy())
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/conv2_output.npz",
+                 conv2_output.cpu().detach().numpy())
         relu2_output = self.relu2_mutated(conv2_output)
-        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/relu2_output.npz",relu2_output.cpu().detach().numpy())
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/relu2_output.npz",
+                 relu2_output.cpu().detach().numpy())
         maxpool2_output = self.pool2(relu2_output)
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/maxpool2_output.npz",
+                 maxpool2_output.cpu().detach().numpy())
         flatten_output = self.flatten(maxpool2_output)
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/flatten_output.npz",
+                 flatten_output.cpu().detach().numpy())
         fc1_output = self.linear1_mutated(flatten_output)
-        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/fc1_output.npz",fc1_output.cpu().detach().numpy())
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/fc1_output.npz",
+                 fc1_output.cpu().detach().numpy())
         relu3_output = self.relu3_mutated(fc1_output)
-        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/relu3_output.npz",relu3_output.cpu().detach().numpy())
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/relu3_output.npz",
+                 relu3_output.cpu().detach().numpy())
         fc2_output = self.linear2_mutated(relu3_output)
-        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/fc2_output.npz",fc2_output.cpu().detach().numpy())
+        np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/fc2_output.npz",
+                 fc2_output.cpu().detach().numpy())
         tail_flatten_output = self.tail_flatten(fc2_output)
         tail_fc_output = self.tail_fc(tail_flatten_output)
         tail_fc_output = tail_fc_output
@@ -79,7 +93,8 @@ def train(inp, label):
     gradients = {name: param.grad.to('cpu').numpy() for name, param in model.named_parameters()}
     return gradients, loss.item(), output.detach().to('cpu').numpy()
 
+
 inp = np.load("./pytorch-paddle-LeNet/LeNet-10-300/case/input.npz")
 gradients, loss, output = train(inp['inp'], inp['label'])
 print(output)
-np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/output.npz",output)
+np.savez("./pytorch-paddle-LeNet/LeNet-10-300/case/pytorch_gpu/layer_outputs/output.npz", output)
