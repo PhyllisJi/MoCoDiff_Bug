@@ -1,4 +1,0 @@
-run result: True
-run time: 0.018474102020263672
-mutate info: api para mutate|chosen attr is: transB|mode is: legal
-father: LeNet-9-349

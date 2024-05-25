@@ -1,7 +1,0 @@
-{
-    "run result": true,
-    "run time": 0.022032976150512695,
-    "train time": 0.23762941360473633,
-    "loss": 3.851914882659912,
-    "target lib": "pytorch_gpu"
-}
