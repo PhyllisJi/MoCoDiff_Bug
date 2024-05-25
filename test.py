@@ -40,11 +40,11 @@ gpu_input = np.load("./pytorch_gpu_output.npz")['fc1_output']
 cpu_input_tensor = torch.from_numpy(cpu_input)
 gpu_input_tensor = torch.from_numpy(gpu_input).to(device)
 
-gpu_output = torch.reciprocal(gpu_input_tensor)
+gpu_output = torch.round(gpu_input_tensor)
 #np.savez("./gpu_output.npz",gpu_output.cpu().detach().numpy())
 gpu_output = gpu_output.to('cpu')
 
-cpu_output = torch.reciprocal(cpu_input_tensor)
+cpu_output = torch.round(cpu_input_tensor)
 #np.savez("./cpu_output.npz",cpu_output.cpu().detach().numpy())
 
 # 使用切比雪夫距离比较
