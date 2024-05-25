@@ -40,18 +40,18 @@ class Model_gGjaaC_PbmJv5McK74QSRSo6yZEqY0Nb(nn.Module):
         
         parent_dir = os.path.dirname(os.path.abspath(script_path_os))
         np.savez(f"{parent_dir}/layers_output.npz", 
-            # conv1_output=conv1_output.cpu().detach().numpy(),
-            # relu1_output=relu1_output.cpu().detach().numpy(),
-            # maxpool1_output=maxpool1_output.cpu().detach().numpy(),
-            # conv2_output=conv2_output.cpu().detach().numpy(),
-            # relu2_output=relu2_output.cpu().detach().numpy(),
-            # maxpool2_output=maxpool2_output.cpu().detach().numpy(),
-            # flatten_output=flatten_output.cpu().detach().numpy(),
+            conv1_output=conv1_output.cpu().detach().numpy(),
+            relu1_output=relu1_output.cpu().detach().numpy(),
+            maxpool1_output=maxpool1_output.cpu().detach().numpy(),
+            conv2_output=conv2_output.cpu().detach().numpy(),
+            relu2_output=relu2_output.cpu().detach().numpy(),
+            maxpool2_output=maxpool2_output.cpu().detach().numpy(),
+            flatten_output=flatten_output.cpu().detach().numpy(),
             fc1_output=fc1_output.cpu().detach().numpy(),
             relu3_output=relu3_output.cpu().detach().numpy(),
-            # fc2_output=fc2_output.cpu().detach().numpy(),
-            # tail_flatten_output=tail_flatten_output.cpu().detach().numpy(),
-            # tail_fc_output=tail_fc_output.cpu().detach().numpy()
+            fc2_output=fc2_output.cpu().detach().numpy(),
+            tail_flatten_output=tail_flatten_output.cpu().detach().numpy(),
+            tail_fc_output=tail_fc_output.cpu().detach().numpy()
             )
         
         return tail_fc_output
@@ -72,7 +72,7 @@ def initialize(model):
     module_dir = os.path.dirname(__file__)
     for name, param in model.named_parameters():
         layer_name, matrix_name = name.rsplit('.', 1)
-        matrix_path = module_dir + '/../initializer/' + layer_name + '/' + matrix_name + '.npz'
+        matrix_path = module_dir + '/initializer/' + layer_name + '/' + matrix_name + '.npz'
         data = np.load(matrix_path)
         tensor = torch.from_numpy(data['matrix']).float()
         tensor = tensor.to(param.device)
@@ -90,41 +90,5 @@ def train(inp, label):
     gradients = {name: param.grad.to('cpu').numpy() for name, param in model.named_parameters()}
     return gradients, loss.item(), output.detach().to('cpu').numpy()
 
-
-if __name__ == "__main__":
-    import time
-    import json
-    import numpy as np
-    import os
-    script_path_os = os.path.abspath(__file__)
-    
-    parent_dir = os.path.dirname(os.path.abspath(script_path_os))
-    case_dir = os.path.dirname(parent_dir)
-    
-    input = np.load(f"{case_dir}/input.npz")
-    new_json_file = f"{parent_dir}/new_result.json"
-    new_output_file = f"{parent_dir}/new_output.npz"
-    new_grad_file = f"{parent_dir}/new_grad.npz"
-    
-    run_start = time.time()
-    run_f = go()
-    run_end = time.time()
-    
-    train_start = time.time()
-    g, l, o = train(input['inp'], input['label'])
-    train_end = time.time()
-    
-    json_data = {
-        "run result": run_f,
-        "run time": run_end - run_start,
-        "train time": train_end - train_start,
-        "loss": l,
-        "target lib": "pytorch_gpu",
-    }
-    with open(new_json_file, 'w') as json_file:
-        json.dump(json_data, json_file)
-    
-    np.savez(new_output_file, output=o)
-
-    # print(g)
-    np.savez(new_grad_file, **g)
+input = np.load("./input.npz")
+train(input['inp'], input['label'])
