@@ -1,52 +1,38 @@
 # MoCoDiff_Bug
 
-#LeNet-11-821
+#LeNet-11-302
 
 ### The diff between layers
 
 ```
-# W0525 05:58:23.551180  1942 gpu_resources.cc:119] Please NOTE: device: 0, GPU Compute Capability: 8.6, Driver API Version: 12.2, Runtime API Version: 11.8
-# W0525 05:58:23.552209  1942 gpu_resources.cc:164] device: 0, cuDNN Version: 8.9.
-
-relu2_output.npz 1.1175870895385742e-08
-maxpool2_output.npz 1.1175870895385742e-08
-conv1_output.npz 0.0
-relu4_output.npz 1.0
-fc2_output.npz 0.0001531541347503662
-conv2_output.npz 0.0
-relu3_output.npz 2.9802322387695312e-08
-flatten_output.npz 1.1175870895385742e-08
-output.npz 0.248759925365448
-relu1_output.npz 0.0
-fc1_output.npz 5.960464477539063e-08
-maxpool1_output.npz 0.0
+fc2_output.npz 0.00019089877605438232
+relu4_output.npz 2942823.25
+output.npz 717287.0
 ```
 
-```
-# W0525 05:54:59.668944   515 gpu_resources.cc:119] Please NOTE: device: 0, GPU Compute Capability: 7.5, Driver API Version: 12.2, Runtime API Version: 11.8
-# W0525 05:54:59.670363   515 gpu_resources.cc:164] device: 0, cuDNN Version: 8.9.
+### Grad diff
 
-relu2_output.npz 1.1175870895385742e-08
-maxpool2_output.npz 1.1175870895385742e-08
-conv1_output.npz 0.0
-relu4_output.npz 0.0
-fc2_output.npz 2.086162567138672e-07
-conv2_output.npz 0.0
-relu3_output.npz 2.9802322387695312e-08
-flatten_output.npz 1.1175870895385742e-08
-output.npz 0.0
-relu1_output.npz 0.0
-fc1_output.npz 5.960464477539063e-08
-maxpool1_output.npz 0.0
+```
+tail_fc.bias: 梯度数据不一致, 差值:0.004240369889885187
+conv1_mutated.bias: 梯度数据不一致, 差值:38971648.0
+linear1_mutated.bias: 梯度数据不一致, 差值:154666512.0
+linear2.weight: 梯度数据不一致, 差值:271438272.0
+linear1_mutated.weight: 梯度数据不一致, 差值:41292152.0
+conv1_mutated.weight: 梯度数据不一致, 差值:109647968.0
+tail_fc.weight: 梯度数据不一致, 差值:2942.853759765625
+conv2_mutated.bias: 梯度数据不一致, 差值:348457472.0
+conv2_mutated.weight: 梯度数据不一致, 差值:223159072.0
+linear2.bias: 梯度数据不一致, 差值:682456960.0
 ```
 
 ### Steps to Reproduction
 
 ```bash
-git clone -b paddle-issue#64591 https://github.com/PhyllisJi/MoCoDiff_Bug.git
+git clone -b paddle-issue#64606 https://github.com/PhyllisJi/MoCoDiff_Bug.git
 cd MoCoDiff_Bug/
 cd paddle_bug/
 python ./layer_diff.py
+python ./grad_diff.py
 ```
 
 ```

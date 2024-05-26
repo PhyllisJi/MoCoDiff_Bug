@@ -1,4 +1,0 @@
-run result: True
-run time: 0.016940593719482422
-mutate info: api name mutate|new op is: Floor
-father: LeNet-10-48
