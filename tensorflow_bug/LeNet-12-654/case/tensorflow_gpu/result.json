@@ -1,7 +1,0 @@
-{
-    "run result": true,
-    "run time": 0.49316906929016113,
-    "train time": 0.6897952556610107,
-    "loss": 2.328299045562744,
-    "target lib": "tensorflow_gpu"
-}
