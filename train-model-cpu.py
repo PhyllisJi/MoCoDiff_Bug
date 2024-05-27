@@ -43,7 +43,7 @@ def initialize(model):
     module_dir = os.path.dirname(__file__)
     for name, param in model.named_parameters():
         layer_name, matrix_name = name.rsplit('.', 1)
-        matrix_path = module_dir + './initializer/' + layer_name + '/' + matrix_name + '.npz'
+        matrix_path = module_dir + '/initializer/' + layer_name + '/' + matrix_name + '.npz'
         data = np.load(matrix_path)
         tensor = torch.from_numpy(data['matrix']).float()
         tensor = tensor.to(param.device)
