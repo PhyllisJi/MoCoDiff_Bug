@@ -26,8 +26,8 @@ def read_grad(model, path):
                 print(line.strip())
                 write_file(diff_file, line + "\n")
 
-    grad_pytorch = np.load(f'{model}/{path}/case/pytorch_gpu/grad.npz')
-    grad_paddle = np.load(f'{model}/{path}/case/paddle_gpu/grad.npz')
+    grad_pytorch = np.load(f'{model}/{path}/case/pytorch_gpu/grad-new.npz')
+    grad_paddle = np.load(f'{model}/{path}/case/paddle_gpu/grad-new.npz')
 
     output_pytorch = np.load(f'{model}/{path}/case/pytorch_gpu/output.npz')
     output_pytorch = output_pytorch['output']
@@ -59,7 +59,7 @@ def read_grad(model, path):
                     print(f"grad_paddle[{key}] is none")
                     write_file(diff_file, f"grad_paddle[{key}] is none\n")
                 else:
-                    # print(f"{key}: 梯度数据一致")
+                    print(f"{key}: 梯度数据一致")
                     no_use = 1
             else:
                 print(f"{key}: 梯度数据不一致, 差值:{compare_result}")

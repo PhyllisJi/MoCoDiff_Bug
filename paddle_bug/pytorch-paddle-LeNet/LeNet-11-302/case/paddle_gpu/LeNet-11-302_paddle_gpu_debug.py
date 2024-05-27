@@ -53,6 +53,7 @@ def go():
     except Exception:
         flag = False
     return flag
+print(go())
 
 
 def initialize(model):
@@ -86,3 +87,4 @@ inp = np.load("./pytorch-paddle-LeNet/LeNet-11-302/case/input.npz")
 gradients, loss, output = train(inp['inp'], inp['label'])
 print(output)
 np.savez("./pytorch-paddle-LeNet/LeNet-11-302/case/paddle_gpu/layer_outputs/output.npz",output)
+np.savez("./pytorch-paddle-LeNet/LeNet-11-302/case/paddle_gpu/grad-new.npz", **gradients)
