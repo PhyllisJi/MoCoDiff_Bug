@@ -41,6 +41,6 @@ else:
                 no_use = 1
         else:
             print(f"{key}: gradient inconsistency, distance:{compare_result}")
-            write_file(diff_file, f"{key}: gradient inconsistency, distance:{compare_result}\n"               
+            write_file(diff_file, f"{key}: gradient inconsistency, distance:{compare_result}\n")               
             write_file(diff_file, f"grad_cpu[{key}]: {grad_cpu[key]}\n")
             write_file(diff_file, f"grad_gpu[{key}]: {grad_gpu[key]}\n")
