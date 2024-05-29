@@ -43,7 +43,7 @@ level = "8"
 order = "93"
 library_1 = "paddle"
 library_2 = "paddle"
-comp_type = "diff"
+comp_type = "same"
 
 if comp_type == "same":
     gpu_code_path = f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/{model}-{level}-{order}_{library_1}_gpu_debug.py'
@@ -62,7 +62,7 @@ if comp_type == "same":
         output_diff = chebyshev_distance(cpu_output, gpu_output)
         print(npz_files[i], output_diff)
         positions, values = find_difference_positions(cpu_output, gpu_output, distance=output_diff)
-        print(positions, values)
+        # print(positions, values)
 
 else:
     code_path_1 = f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/{model}-{level}-{order}_{library_1}_gpu_debug.py'
@@ -105,9 +105,3 @@ else:
         # print(positions)
         # if "fc2_output" in npz_files[i] or "relu4" in npz_files[i]:
         #     print(positions, values)
-
-
-
-
-
-
