@@ -1,4 +1,0 @@
-run result: True
-run time: 0.01594066619873047
-mutate info: api name mutate|new op is: Reciprocal
-father: LeNet-10-200

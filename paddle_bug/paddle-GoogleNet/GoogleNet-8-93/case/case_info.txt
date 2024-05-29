@@ -1,0 +1,4 @@
+run result: True
+run time: 0.07715463638305664
+mutate info: api name mutate|no mutate
+father: GoogleNet-7-4

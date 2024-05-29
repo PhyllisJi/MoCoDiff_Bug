@@ -37,11 +37,11 @@ def find_difference_positions(array1, array2, distance=1):
 
 
 # res_path = "pytorch_gpu-paddle_gpu-LeNet"
-res_path = "pytorch-paddle-LeNet"
-model = "LeNet"
-level = "11"
-order = "302"
-library_1 = "pytorch"
+res_path = "paddle-GoogleNet"
+model = "GoogleNet"
+level = "8"
+order = "93"
+library_1 = "paddle"
 library_2 = "paddle"
 comp_type = "diff"
 
@@ -69,18 +69,28 @@ else:
     code_path_2 = f'./{res_path}/{model}-{level}-{order}/case/{library_2}_gpu/{model}-{level}-{order}_{library_2}_gpu_debug.py'
 
     try:
-        result_1 = subprocess.run(['python', code_path_1], capture_output=True, text=True, check=True)
+        result_1 = subprocess.run(['python', code_path_1], capture_output=True, text=True)
         print(f"Standard Output of {library_1}:\n", result_1.stdout)
-    except subprocess.CalledProcessError as e:
-        print(f"Standard Error of {library_1}:\n", e.stderr)
-        print(f"Return Code of {library_1}:", e.returncode)
+        if result_1.returncode != 0:
+            print(f"Standard Error of {library_1}:\n", result_1.stderr)
+            print(f"Return Code of {library_1}:", result_1.returncode)
+    except Exception as e:
+        print(f"An error occurred with {library_1}:", str(e))
+    # except subprocess.CalledProcessError as e:
+    #     print(f"Standard Error of {library_1}:\n", e.stderr)
+    #     print(f"Return Code of {library_1}:", e.returncode)
 
     try:
-        result_2 = subprocess.run(['python', code_path_2], capture_output=True, text=True, check=True)
+        result_2 = subprocess.run(['python', code_path_2], capture_output=True, text=True)
         print(f"Standard Output of {library_2}:\n", result_2.stdout)
-    except subprocess.CalledProcessError as e:
-        print(f"Standard Error of {library_2}:\n", e.stderr)
-        print(f"Return Code of {library_2}:", e.returncode)
+        if result_2.returncode != 0:
+            print(f"Standard Error of {library_2}:\n", result_2.stderr)
+            print(f"Return Code of {library_2}:", result_2.returncode)
+    except Exception as e:
+        print(f"An error occurred with {library_2}:", str(e))
+    # except subprocess.CalledProcessError as e:
+    #     print(f"Standard Error of {library_2}:\n", e.stderr)
+    #     print(f"Return Code of {library_2}:", e.returncode)
 
     output_path_1 = f'./{res_path}/{model}-{level}-{order}/case/{library_1}_gpu/layer_outputs/'
     output_path_2 = f'./{res_path}/{model}-{level}-{order}/case/{library_2}_gpu/layer_outputs/'
@@ -92,4 +102,12 @@ else:
         output_diff = chebyshev_distance(output_1, output_2)
         print(npz_files[i], output_diff)
         positions, values = find_difference_positions(output_1, output_2, distance=output_diff)
-        # print(positions, values)
+        # print(positions)
+        # if "fc2_output" in npz_files[i] or "relu4" in npz_files[i]:
+        #     print(positions, values)
+
+
+
+
+
+
