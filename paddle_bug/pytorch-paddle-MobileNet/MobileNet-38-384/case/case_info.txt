@@ -1,0 +1,4 @@
+run result: True
+run time: 0.02528214454650879
+mutate info: api name mutate|new op is: ConvTranspose
+father: MobileNet-37-1199
