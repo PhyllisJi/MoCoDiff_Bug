@@ -255,9 +255,9 @@ def convert_to_serializable(obj):
 
 
 library = "pytorch"
-case_path = "./pytorch-PointNet/PointNet-1-1/case"
+case_path = "./pytorch-PointNet/PointNet-20-238/case"
 input_path = case_path + "/input.npz"
-node = "PointNet-1-1"
+node = "PointNet-20-238"
 ns_res, output_diff_dict, max_grad_diff, grad_diff_dict, loss_diff = cmp_outputs(library, case_path, node, input_path)
 for key in output_diff_dict.keys():
     print(key)

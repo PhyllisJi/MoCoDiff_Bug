@@ -1,0 +1,4 @@
+run result: True
+run time: 0.02675914764404297
+mutate info: api para mutate|chosen attr is: no attr can be chosen|mode is: no attr can be chosen
+father: PointNet-19-545
