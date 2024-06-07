@@ -1,0 +1,9 @@
+{
+    "test flag": false,
+    "run time": 0.09879398345947266,
+    "false list": "['grad_diff_tooBig']",
+    "train time": 0.5956516265869141,
+    "loss diff": 6.103515625e-05,
+    "output diff": 0.00341796875,
+    "grad diff": 0.17942047119140625
+}

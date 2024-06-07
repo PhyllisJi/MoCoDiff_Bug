@@ -1,0 +1,7 @@
+{
+    "run result": true,
+    "run time": 0.06836700439453125,
+    "train time": 0.23432374000549316,
+    "loss": 860.0193481445312,
+    "target lib": "pytorch_cpu"
+}

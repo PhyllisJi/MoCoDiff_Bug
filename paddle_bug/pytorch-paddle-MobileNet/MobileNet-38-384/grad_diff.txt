@@ -1,3 +1,0 @@
-MobileNet-38-384
-mutate info: api name mutate|new op is: ConvTranspose
-

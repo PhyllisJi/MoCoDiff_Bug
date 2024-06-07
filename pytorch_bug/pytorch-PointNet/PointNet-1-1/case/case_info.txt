@@ -1,0 +1,4 @@
+run result: True
+run time: 0.4073147773742676
+mutate info: api para mutate|chosen attr is: pads|mode is: min
+father: PointNet-0-1
