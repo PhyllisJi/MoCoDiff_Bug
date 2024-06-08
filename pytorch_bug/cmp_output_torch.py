@@ -173,7 +173,6 @@ def cmp_outputs(library, case_path, node, input_path):
             output_diff_dict[key] = {"mean": process_valid_num(output_mean_diff),
                                      "max": process_valid_num(output_max_diff),
                                      "min": process_valid_num(output_min_diff)}
-        ns_res = judge_numerical_stability(cpu_outputs, gpu_outputs, output_diff_dict)
         grad_diff_dict = OrderedDict()
         if (gpu_loss is None) | (cpu_loss is None):
             print("Train Error!!")
@@ -197,68 +196,15 @@ def cmp_outputs(library, case_path, node, input_path):
         loss_diff = process_valid_num(np.abs(cpu_loss - gpu_loss))
         grad_diff_dict = process_valid_num_dict(grad_diff_dict)
         print("loss diff: ", loss_diff)
-        return ns_res, output_diff_dict, max_grad_diff, grad_diff_dict, loss_diff
+        return output_diff_dict, max_grad_diff, grad_diff_dict, loss_diff
 
-
-def judge_numerical_stability(cpu_outputs, gpu_outputs, output_diff_dict):
-    diff_dict_items = list(output_diff_dict.items())
-    for i in range(len(diff_dict_items)):
-        current_key, current_value = diff_dict_items[i]
-        # print("current_key: ", current_key)
-        if current_key.split("-")[1] == "torch.reciprocal":
-            last_key, last_value = diff_dict_items[i - 1]
-            last_cpu_output = cpu_outputs[last_key].detach().to('cpu').numpy()
-            if float(abs(np.mean(last_cpu_output))) < 10 ** -4:
-                # if (float(last_value["mean"]) < 10**-6) & (cpu_outputs[last_key]< 10**-4):
-                uncheck_reason = "The input is too small " + str(float(abs(np.mean(last_cpu_output))))
-                return uncheck_reason, False
-            else:
-                print("torch.reciprocal", float(abs(np.mean(last_cpu_output))) < 10 ** -4)
-                continue
-                # check_reason = "The input is not too small " + str(last_value["mean"])
-                # return check_reason, True
-        elif current_key.split("-")[1] in ["torch.floor", "torch.ceil", "torch.round", "F.threshold"]:
-            last_key, last_value = diff_dict_items[i - 1]
-            last_cpu_output = cpu_outputs[last_key].detach().to('cpu').numpy()
-            last_gpu_output = gpu_outputs[last_key].detach().to('cpu').numpy()
-            last_positions = np.where(last_cpu_output != last_gpu_output)
-            current_cpu_output = cpu_outputs[current_key].detach().to('cpu').numpy()
-            current_gpu_output = gpu_outputs[current_key].detach().to('cpu').numpy()
-            cur_positions = np.where(current_cpu_output != current_gpu_output)
-            if np.all(np.isin(cur_positions, last_positions)):
-                print("torch.floor", "torch.ceil", "torch.round", "F.threshold do not check")
-                return "floor ceil round et.al position match", False
-            else:
-                cur_as_lists = [x.tolist() for x in cur_positions]
-                last_as_lists = [x.tolist() for x in last_positions]
-                # print(cur_as_lists, last_as_lists)
-                check_reason = {"cur_pos": cur_as_lists, "last_pos": last_as_lists}
-                return check_reason, True
-        elif i == len(diff_dict_items) - 3:
-            last_key, last_value = diff_dict_items[i - 1]
-            if float(last_value["max"]) > 0.01:
-                print("input has difference, do not check")
-                uncheck_reason = "input has difference, do not check " + str(last_value["max"])
-                return uncheck_reason, False
-            else:
-                continue
-
-    return "No match to existing situation", True
-
-
-def convert_to_serializable(obj):
-    if isinstance(obj, np.ndarray):
-        return obj.tolist()
-    elif isinstance(obj, np.generic):
-        return obj.item()
-    raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
 
 
 library = "pytorch"
 case_path = "./pytorch-PointNet/PointNet-1-1/case"
 input_path = case_path + "/input.npz"
 node = "PointNet-1-1"
-ns_res, output_diff_dict, max_grad_diff, grad_diff_dict, loss_diff = cmp_outputs(library, case_path, node, input_path)
+output_diff_dict, max_grad_diff, grad_diff_dict, loss_diff = cmp_outputs(library, case_path, node, input_path)
 for key in output_diff_dict.keys():
     print(key)
     print(output_diff_dict[key])
