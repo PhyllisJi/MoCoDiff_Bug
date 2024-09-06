@@ -2,6 +2,10 @@ import copy
 import numpy as np
 import tensorflow as tf
 
+random.seed(42)
+np.random.seed(42)
+tf.random.set_seed(42)
+tf.config.experimental.enable_op_determinism()
 
 def pointnet(input_shape):
     input_tensor = tf.keras.Input(shape=input_shape)
